@@ -1,107 +1,413 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-<meta charset='UTF-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PossiblePage Labs — Revenue Quality Dashboard</title>
 <style>
-:root { --bg:#f7f4ef; --ink:#1b1b1b; --muted:#666; --card:#ffffff; --line:#e6ded3; --accent:#111827; }
-body { margin:0; font-family: Inter, Arial, sans-serif; background:var(--bg); color:var(--ink); }
-header { padding:54px 8vw 28px; background:#111827; color:white; }
-header p { max-width:900px; color:#d6d6d6; font-size:18px; line-height:1.55; }
-h1 { font-size:48px; margin:0 0 10px; letter-spacing:-1.5px; }
-.section { padding:36px 8vw; }
-.kpis { display:grid; grid-template-columns:repeat(4,minmax(160px,1fr)); gap:18px; }
-.card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow: 0 8px 24px rgba(0,0,0,.04); }
-.kpi-label { color:var(--muted); font-size:13px; text-transform:uppercase; letter-spacing:.08em; }
-.kpi-value { font-size:34px; font-weight:800; margin-top:8px; letter-spacing:-1px; }
-.grid { display:grid; grid-template-columns:1.1fr .9fr; gap:22px; align-items:start; }
-h2 { font-size:28px; margin:0 0 16px; letter-spacing:-.7px; }
-h3 { font-size:19px; margin:0 0 12px; }
-.seg-row { display:grid; grid-template-columns:90px 1fr 250px; gap:12px; align-items:center; margin:14px 0; }
-.seg-label { font-weight:700; }
-.seg-bar-bg { height:18px; background:#eee8df; border-radius:99px; overflow:hidden; }
-.seg-bar { height:18px; border-radius:99px; }
-.seg-num { color:var(--muted); font-size:14px; }
-.table { width:100%; border-collapse:collapse; font-size:14px; }
-.table th, .table td { padding:10px; border-bottom:1px solid var(--line); text-align:left; }
-.table th { color:#555; font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
-.callout { border-left:5px solid #111827; background:#fff; padding:22px; border-radius:12px; line-height:1.5; }
-.pill { display:inline-block; padding:6px 10px; border-radius:99px; background:#eee8df; margin:4px; font-size:13px; }
-.footer { color:#777; font-size:13px; padding-bottom:50px; }
-@media(max-width:900px) { .kpis,.grid { grid-template-columns:1fr; } h1 {font-size:36px} .seg-row { grid-template-columns:1fr; } }
+:root {
+  --bg:#f7f3ed; --card:#fffefa; --ink:#1d1f24; --muted:#6b625b; --line:#e5ded4;
+  --accent:#c2410c; --accent2:#7c2d12; --green:#2f9e75; --amber:#d69e2e; --risk:#dd6b20; --toxic:#c2410c; --navy:#172033;
+}
+*{box-sizing:border-box}
+body{margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:var(--bg); color:var(--ink); line-height:1.45;}
+header{background:linear-gradient(135deg,#1f2937 0%,#7c2d12 100%); color:white; padding:56px 64px 42px;}
+header h1{font-size:48px; line-height:1.04; margin:0 0 16px; letter-spacing:-.035em; max-width:1050px;}
+header p{font-size:18px; max-width:900px; color:#f7e7d9; margin:0}
+main{padding:32px 64px 70px; max-width:1480px; margin:auto;}
+.grid{display:grid; grid-template-columns:repeat(4,1fr); gap:18px;}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+.grid2{display:grid; grid-template-columns:1.1fr .9fr; gap:18px;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:22px; padding:22px; box-shadow:0 8px 20px rgba(31,41,55,.04);}
+.card.dark{background:#172033; color:white; border-color:#172033;}
+.card.reco{border:2px solid #c2410c; background:#fffaf5;}
+.kpi .label{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:800;}
+.kpi .value{font-size:34px; font-weight:900; letter-spacing:-.03em; margin-top:6px;}
+.kpi .sub{font-size:13px; color:var(--muted); margin-top:4px;}
+.dark .label,.dark .sub{color:#cbd5e1}
+section{margin-top:22px;}
+h2{font-size:25px; margin:0 0 14px; letter-spacing:-.02em;}
+h3{font-size:18px; margin:0 0 10px;}
+p{margin:0 0 12px;}
+.callout{border-left:5px solid var(--accent); padding:8px 0 8px 16px; margin-top:10px; color:#2b2724;}
+.tag{display:inline-block; padding:7px 11px; border-radius:999px; background:#f2e8df; color:#5b4032; font-size:12px; font-weight:800; margin:4px 4px 0 0;}
+table{width:100%; border-collapse:collapse; font-size:13px;}
+th{text-align:left; color:var(--muted); text-transform:uppercase; font-size:11px; letter-spacing:.06em; padding:10px 8px; border-bottom:1px solid var(--line);}
+td{padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:middle;}
+tr:last-child td{border-bottom:0}
+.dot{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px;}
+.dot.healthy{background:var(--green)} .dot.watchlist{background:var(--amber)} .dot.risky{background:var(--risk)} .dot.toxic{background:var(--toxic)}
+.barline{margin:15px 0;}
+.barlabel{display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;}
+.barlabel span{color:var(--muted)}
+.bartrack{height:16px; background:#efe6dc; border-radius:999px; overflow:hidden;}
+.barfill{height:100%; border-radius:999px;}
+.waterfall{display:grid; grid-template-columns:1fr .1fr 1fr .1fr 1fr; gap:12px; align-items:center;}
+.wbox{padding:20px; border-radius:18px; background:#fff; border:1px solid var(--line); text-align:center;}
+.wbox strong{display:block; font-size:31px; letter-spacing:-.02em;}
+.arrow{font-size:28px; color:var(--accent); text-align:center; font-weight:900;}
+.chart{display:flex; align-items:end; gap:10px; height:210px; padding:16px 8px 0; border-bottom:1px solid var(--line);}
+.monthbar{flex:1; text-align:center; min-width:0;}
+.vbar{width:100%; max-width:45px; margin:4px auto 6px; border-radius:8px 8px 0 0; background:linear-gradient(180deg,#c2410c,#f59e0b);}
+.barval{font-size:11px; color:var(--muted);}
+.mth{font-size:11px; color:var(--muted);}
+.note{font-size:12px; color:var(--muted); margin-top:12px;}
+.footer{font-size:12px; color:var(--muted); text-align:center; padding:24px 0 0;}
+@media(max-width:1000px){header,main{padding-left:24px; padding-right:24px} .grid,.grid3,.grid2{grid-template-columns:1fr} header h1{font-size:36px} .waterfall{grid-template-columns:1fr} .arrow{display:none}}
 </style>
 </head>
 <body>
 <header>
-  <h1>PossiblePage Labs — Revenue Quality Dashboard</h1>
-  <p>Synthetic AI + strategy case for a B2B no-code SaaS: measuring the difference between revenue closed by Sales and revenue that remains healthy after 90/180 days.</p>
+  <h1>PossiblePage Labs — Revenue Quality & Churn Risk Dashboard</h1>
+  <p>Synthetic AI + business strategy case for a B2B no-code SaaS. The question is not only how much MRR Sales closed, but how much of that MRR remains healthy after 90/180 days.</p>
 </header>
-<section class='section'>
-  <div class='kpis'>
-    <div class='card'><div class='kpi-label'>Closed MRR</div><div class='kpi-value'>€2.989.287</div></div>
-    <div class='card'><div class='kpi-label'>Surviving MRR 180d</div><div class='kpi-value'>€2.786.514</div></div>
-    <div class='card'><div class='kpi-label'>MRR churned 180d</div><div class='kpi-value'>€202.773</div></div>
-    <div class='card'><div class='kpi-label'>Risky + Toxic MRR share</div><div class='kpi-value'>7.1%</div></div>
-  </div>
-</section>
-<section class='section grid'>
-  <div class='card'>
-    <h2>Revenue quality segments</h2>
-    <p>Accounts are scored using a composite Revenue Quality Risk Index based on fit, beta promises, product adoption, support load, health and churn signals.</p>
-    
-    <div class='seg-row'>
-      <div class='seg-label'>Healthy</div>
-      <div class='seg-bar-bg'><div class='seg-bar' style='width:100%;background:#1f9d73'></div></div>
-      <div class='seg-num'>1018 acc · 0.0% MRR churned 180d</div>
+<main>
+  <section class="grid3">
+    <div class="card reco">
+      <h2>1. Business recommendation</h2>
+      <p><strong>Add a Revenue Quality KPI to Sales incentives.</strong> Variable compensation should include a 90/180-day quality component: early churn, support ticket load, onboarding completion and customer health.</p>
+      <div class="tag">Closed MRR</div><div class="tag">Surviving MRR</div><div class="tag">Ticket load</div><div class="tag">Health score</div><div class="tag">Churn penalty</div>
     </div>
-    <div class='seg-row'>
-      <div class='seg-label'>Watchlist</div>
-      <div class='seg-bar-bg'><div class='seg-bar' style='width:36%;background:#e4a11b'></div></div>
-      <div class='seg-num'>368 acc · 10.5% MRR churned 180d</div>
+    <div class="card reco">
+      <h2>2. Why it matters</h2>
+      <p>Low-fit and beta-promised customers can create revenue that looks good at close, but later generates tickets, CS overload, lower customer health and early churn.</p>
+      <div class="callout">This is a cross-functional problem: Sales, CS, Support and Product need aligned incentives.</div>
     </div>
-    <div class='seg-row'>
-      <div class='seg-label'>Risky</div>
-      <div class='seg-bar-bg'><div class='seg-bar' style='width:10%;background:#d97706'></div></div>
-      <div class='seg-num'>108 acc · 61.6% MRR churned 180d</div>
+    <div class="card reco">
+      <h2>3. Evidence stance</h2>
+      <p>The dashboard shows strong directional evidence from synthetic data. The support-load spillover section is a proxy, not a causal proof.</p>
+      <div class="tag">Synthetic data</div><div class="tag">Portfolio case</div><div class="tag">Business analytics</div>
     </div>
-    <div class='seg-row'>
-      <div class='seg-label'>Toxic</div>
-      <div class='seg-bar-bg'><div class='seg-bar' style='width:0%;background:#c2410c'></div></div>
-      <div class='seg-num'>6 acc · 100.0% MRR churned 180d</div>
+  </section>
+
+  <section class="grid">
+    <div class="card kpi"><div class="label">Accounts</div><div class="value">1,500</div><div class="sub">clean account table</div></div>
+    <div class="card kpi"><div class="label">ARR proxy</div><div class="value">€35.9M</div><div class="sub">annual contract value</div></div>
+    <div class="card kpi"><div class="label">Closed MRR</div><div class="value">€3.0M</div><div class="sub">booked at deal close</div></div>
+    <div class="card kpi"><div class="label">Avg ACV</div><div class="value">€24k</div><div class="sub">median €14k</div></div>
+    <div class="card kpi"><div class="label">Surviving MRR 180d</div><div class="value">€2.8M</div><div class="sub">excludes 180d churned MRR</div></div>
+    <div class="card kpi"><div class="label">Churned MRR 180d</div><div class="value">€203k</div><div class="sub">closed but lost early</div></div>
+    <div class="card kpi"><div class="label">180d churn rate</div><div class="value">6.8%</div><div class="sub">102 accounts</div></div>
+    <div class="card kpi"><div class="label">Risky + Toxic MRR</div><div class="value">€213k</div><div class="sub">7.1% of closed MRR</div></div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>Company sizing: what kind of business is this?</h2>
+      <p>Based on the simulated numbers, PossiblePage Labs reads as a <strong>mid-market / scaling B2B SaaS</strong> selling mainly to SMB and mid-market customers.</p>
+      <p>It is not a tiny small business, because the customer base and ARR proxy are substantial. It is not a pure enterprise SaaS either, because the plan mix and customer-size bands skew toward Starter / Growth / Scale and SMB/mid-market accounts.</p>
+      <div class="tag">1,500 accounts</div><div class="tag">€35.9M ARR proxy</div><div class="tag">€24k avg ACV</div><div class="tag">Enterprise 6.5%</div>
     </div>
-  </div>
-  <div class='card'>
-    <h2>Strategic signal</h2>
-    <div class='callout'>
-      Toxic accounts generate <strong>2.5×</strong> the first-90-day ticket load of Healthy accounts.<br><br>
-      Beta-promised accounts churn at <strong>15.1%</strong> within 180 days vs <strong>4.0%</strong> for non-beta-promised accounts.
+    <div class="card dark">
+      <h2>Core management question</h2>
+      <p><strong>Closed revenue is not enough.</strong></p>
+      <p>Sales can book MRR that remains >0 in CRM even if the account later churns. In this case, `closed_mrr_eur` means booked MRR at close, not active current MRR.</p>
     </div>
-  </div>
-</section>
-<section class='section grid'>
-  <div class='card'>
-    <h2>Where commercial quality degrades</h2>
-    <table class='table'>
-      <tr><th>Segment</th><th>Accounts</th><th>Closed MRR</th><th>Churned MRR 180d</th><th>Avg tickets 90d</th><th>Avg fit</th></tr>
-      <tr><td>Healthy</td><td>1018</td><td>€2.132.552</td><td>0.0%</td><td>0.7</td><td>73.0</td></tr><tr><td>Watchlist</td><td>368</td><td>€643.374</td><td>10.5%</td><td>0.9</td><td>53.4</td></tr><tr><td>Risky</td><td>108</td><td>€203.232</td><td>61.6%</td><td>1.1</td><td>44.4</td></tr><tr><td>Toxic</td><td>6</td><td>€10.128</td><td>100.0%</td><td>1.7</td><td>31.4</td></tr>
+  </section>
+
+  <section class="card">
+    <h2>Closed MRR vs surviving MRR</h2>
+    <div class="waterfall">
+      <div class="wbox"><span>Closed MRR</span><strong>€3.0M</strong><small>booked at close</small></div>
+      <div class="arrow">→</div>
+      <div class="wbox"><span>MRR churned 180d</span><strong>€203k</strong><small>6.8% of closed MRR</small></div>
+      <div class="arrow">→</div>
+      <div class="wbox"><span>Surviving MRR 180d</span><strong>€2.8M</strong><small>revenue still healthy enough to remain</small></div>
+    </div>
+    <div class="note">MRR > 0 on churned accounts is not a bug here: it is the booked MRR originally closed by Sales. The analysis compares booked revenue with revenue that survives.</div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>Revenue Quality Segments</h2>
+      <table>
+        <thead><tr><th>Segment</th><th>Accounts</th><th>Share</th><th>Closed MRR</th><th>MRR churned 180d</th><th>Tickets 90d</th><th>NPS 6m</th><th>CSAT 6m</th><th>Risk</th></tr></thead>
+        <tbody><tr>
+<td><span class="dot healthy"></span><strong>Healthy</strong></td>
+<td>1,018</td>
+<td>67.9%</td>
+<td>€2.1M</td>
+<td>0.0%</td>
+<td>0.7</td>
+<td>38.8</td>
+<td>3.96</td>
+<td>18.0</td>
+</tr><tr>
+<td><span class="dot watchlist"></span><strong>Watchlist</strong></td>
+<td>368</td>
+<td>24.5%</td>
+<td>€643k</td>
+<td>10.5%</td>
+<td>0.9</td>
+<td>-19.2</td>
+<td>2.51</td>
+<td>43.1</td>
+</tr><tr>
+<td><span class="dot risky"></span><strong>Risky</strong></td>
+<td>108</td>
+<td>7.2%</td>
+<td>€203k</td>
+<td>61.6%</td>
+<td>1.1</td>
+<td>-57.7</td>
+<td>1.59</td>
+<td>62.6</td>
+</tr><tr>
+<td><span class="dot toxic"></span><strong>Toxic</strong></td>
+<td>6</td>
+<td>0.4%</td>
+<td>€10k</td>
+<td>100.0%</td>
+<td>1.7</td>
+<td>-67.1</td>
+<td>1.38</td>
+<td>75.6</td>
+</tr></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h2>MRR concentration by segment</h2>
+      <div class="barline"><div class="barlabel"><strong>Healthy</strong><span>€2.1M · 71.3%</span></div><div class="bartrack"><div class="barfill" style="width:71.3%; background:#2f9e75"></div></div></div><div class="barline"><div class="barlabel"><strong>Watchlist</strong><span>€643k · 21.5%</span></div><div class="bartrack"><div class="barfill" style="width:21.5%; background:#d69e2e"></div></div></div><div class="barline"><div class="barlabel"><strong>Risky</strong><span>€203k · 6.8%</span></div><div class="bartrack"><div class="barfill" style="width:6.8%; background:#dd6b20"></div></div></div><div class="barline"><div class="barlabel"><strong>Toxic</strong><span>€10k · 0.3%</span></div><div class="bartrack"><div class="barfill" style="width:2.0%; background:#c2410c"></div></div></div>
+      <div class="callout">Risky + Toxic accounts represent <strong>7.1%</strong> of closed MRR and should be monitored with a quality guardrail.</div>
+    </div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>Commercial signal: beta promises and low-fit sales</h2>
+      <table>
+        <thead><tr><th>Cohort</th><th>Accounts</th><th>180d churn</th><th>MRR churned 180d</th><th>Tickets 90d</th><th>NPS 6m</th><th>CSAT 6m</th><th>Risk</th></tr></thead>
+        <tbody><tr>
+<td><strong>Beta-promised</strong></td>
+<td>377</td>
+<td>15.1%</td>
+<td>16.4%</td>
+<td>0.9</td>
+<td>-20.0</td>
+<td>2.51</td>
+<td>46.9</td>
+</tr><tr>
+<td><strong>No beta promise</strong></td>
+<td>1,123</td>
+<td>4.0%</td>
+<td>4.1%</td>
+<td>0.7</td>
+<td>29.7</td>
+<td>3.73</td>
+<td>21.1</td>
+</tr><tr>
+<td><strong>Low-fit</strong></td>
+<td>346</td>
+<td>17.1%</td>
+<td>16.4%</td>
+<td>0.9</td>
+<td>-27.1</td>
+<td>2.33</td>
+<td>46.7</td>
+</tr><tr>
+<td><strong>High-fit score ≥75</strong></td>
+<td>476</td>
+<td>2.9%</td>
+<td>2.8%</td>
+<td>0.7</td>
+<td>44.9</td>
+<td>4.09</td>
+<td>15.2</td>
+</tr><tr>
+<td><strong>Risky + Toxic</strong></td>
+<td>114</td>
+<td>64.9%</td>
+<td>63.5%</td>
+<td>1.1</td>
+<td>-58.2</td>
+<td>1.58</td>
+<td>63.3</td>
+</tr><tr>
+<td><strong>Healthy</strong></td>
+<td>1,018</td>
+<td>0.0%</td>
+<td>0.0%</td>
+<td>0.7</td>
+<td>38.8</td>
+<td>3.96</td>
+<td>18.0</td>
+</tr></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h2>Support-load business impact</h2>
+      <p>Toxic accounts generate <strong>2.5×</strong> the first-90-day ticket volume of Healthy accounts.</p>
+      <p>High-ticket-volume months show lower overall customer sentiment in this synthetic dataset:</p>
+      <ul>
+        <li>Avg tickets: <strong>34.3</strong> in lower-load months vs <strong>318.0</strong> in higher-load months.</li>
+        <li>Avg NPS: <strong>27.6</strong> vs <strong>15.3</strong>.</li>
+        <li>Avg CSAT: <strong>3.68</strong> vs <strong>3.38</strong>.</li>
+      </ul>
+      <div class="note">Interpretation: directional spillover proxy, not causal proof. The data supports the hypothesis that fragile revenue increases operational load and can deteriorate the broader customer experience.</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Monthly support load vs customer sentiment proxy</h2>
+    <div class="chart"><div class="monthbar"><div class="barval">7</div><div class="vbar" style="height:4px"></div><div class="mth">01</div></div><div class="monthbar"><div class="barval">24</div><div class="vbar" style="height:11px"></div><div class="mth">02</div></div><div class="monthbar"><div class="barval">72</div><div class="vbar" style="height:33px"></div><div class="mth">03</div></div><div class="monthbar"><div class="barval">91</div><div class="vbar" style="height:42px"></div><div class="mth">04</div></div><div class="monthbar"><div class="barval">133</div><div class="vbar" style="height:62px"></div><div class="mth">05</div></div><div class="monthbar"><div class="barval">166</div><div class="vbar" style="height:77px"></div><div class="mth">06</div></div><div class="monthbar"><div class="barval">210</div><div class="vbar" style="height:98px"></div><div class="mth">07</div></div><div class="monthbar"><div class="barval">212</div><div class="vbar" style="height:99px"></div><div class="mth">08</div></div><div class="monthbar"><div class="barval">243</div><div class="vbar" style="height:114px"></div><div class="mth">09</div></div><div class="monthbar"><div class="barval">289</div><div class="vbar" style="height:135px"></div><div class="mth">10</div></div><div class="monthbar"><div class="barval">341</div><div class="vbar" style="height:160px"></div><div class="mth">11</div></div><div class="monthbar"><div class="barval">324</div><div class="vbar" style="height:152px"></div><div class="mth">12</div></div></div>
+    <table>
+      <thead><tr><th>Month</th><th>Tickets</th><th>Avg NPS</th><th>Avg CSAT</th><th>Avg Health</th><th>Avg first response h</th></tr></thead>
+      <tbody><tr>
+<td>2025-01</td><td>7</td><td>28.8</td><td>3.69</td><td>67.7</td><td>16.3</td>
+</tr><tr>
+<td>2025-02</td><td>24</td><td>27.6</td><td>3.71</td><td>67.5</td><td>10.2</td>
+</tr><tr>
+<td>2025-03</td><td>72</td><td>26.5</td><td>3.65</td><td>66.5</td><td>14.4</td>
+</tr><tr>
+<td>2025-04</td><td>91</td><td>24.9</td><td>3.63</td><td>65.7</td><td>13.2</td>
+</tr><tr>
+<td>2025-05</td><td>133</td><td>23.1</td><td>3.58</td><td>64.4</td><td>13.9</td>
+</tr><tr>
+<td>2025-06</td><td>166</td><td>22.0</td><td>3.54</td><td>63.7</td><td>14.2</td>
+</tr><tr>
+<td>2025-07</td><td>210</td><td>21.0</td><td>3.50</td><td>63.0</td><td>13.0</td>
+</tr><tr>
+<td>2025-08</td><td>212</td><td>18.8</td><td>3.48</td><td>62.2</td><td>12.5</td>
+</tr><tr>
+<td>2025-09</td><td>243</td><td>17.8</td><td>3.45</td><td>61.1</td><td>13.8</td>
+</tr><tr>
+<td>2025-10</td><td>289</td><td>16.9</td><td>3.41</td><td>60.4</td><td>13.0</td>
+</tr><tr>
+<td>2025-11</td><td>341</td><td>15.2</td><td>3.38</td><td>59.5</td><td>13.2</td>
+</tr><tr>
+<td>2025-12</td><td>324</td><td>13.7</td><td>3.34</td><td>58.9</td><td>12.5</td>
+</tr></tbody>
     </table>
-  </div>
-  <div class='card'>
-    <h2>Sales lens</h2>
-    <table class='table'>
-      <tr><th>Sales rep</th><th>Accounts</th><th>Avg risk</th><th>180d churn</th><th>Avg tickets 90d</th></tr>
-      <tr><td>Giulia Neri</td><td>138</td><td>29.6</td><td>6.5%</td><td>0.7</td></tr><tr><td>Nina Poli</td><td>121</td><td>28.5</td><td>9.1%</td><td>0.8</td></tr><tr><td>Marta Fabbri</td><td>145</td><td>28.4</td><td>7.6%</td><td>0.8</td></tr><tr><td>Elena Costa</td><td>156</td><td>28.2</td><td>7.1%</td><td>0.7</td></tr><tr><td>Luca Serra</td><td>151</td><td>27.6</td><td>8.6%</td><td>0.8</td></tr>
+    <div class="note">Ticket volume vs average NPS correlation: -0.989. Ticket volume vs average CSAT correlation: -0.99. Correlation does not imply causation.</div>
+  </section>
+
+  <section class="card">
+    <h2>Anonymized Sales Rep quality view</h2>
+    <p>Sales Rep names are anonymized in the public dataset as Sales Rep #1–#10.</p>
+    <table>
+      <thead><tr><th>Sales rep</th><th>Accounts</th><th>Closed MRR</th><th>MRR churned 180d</th><th>Risky/Toxic acct</th><th>Tickets 90d</th><th>Low-fit</th><th>Beta promise</th><th>Avg risk</th></tr></thead>
+      <tbody><tr>
+<td><strong>Sales Rep #6</strong></td>
+<td>145</td>
+<td>€321k</td>
+<td>9.3%</td>
+<td>10.3%</td>
+<td>0.8</td>
+<td>23.4%</td>
+<td>31.0%</td>
+<td>28.4</td>
+</tr><tr>
+<td><strong>Sales Rep #7</strong></td>
+<td>121</td>
+<td>€322k</td>
+<td>8.5%</td>
+<td>5.0%</td>
+<td>0.8</td>
+<td>22.3%</td>
+<td>25.6%</td>
+<td>28.5</td>
+</tr><tr>
+<td><strong>Sales Rep #8</strong></td>
+<td>136</td>
+<td>€259k</td>
+<td>8.3%</td>
+<td>7.4%</td>
+<td>0.6</td>
+<td>19.1%</td>
+<td>25.7%</td>
+<td>26.3</td>
+</tr><tr>
+<td><strong>Sales Rep #1</strong></td>
+<td>174</td>
+<td>€339k</td>
+<td>7.7%</td>
+<td>8.0%</td>
+<td>0.8</td>
+<td>23.0%</td>
+<td>21.3%</td>
+<td>27.6</td>
+</tr><tr>
+<td><strong>Sales Rep #2</strong></td>
+<td>156</td>
+<td>€323k</td>
+<td>7.7%</td>
+<td>9.0%</td>
+<td>0.7</td>
+<td>27.6%</td>
+<td>25.6%</td>
+<td>28.2</td>
+</tr><tr>
+<td><strong>Sales Rep #5</strong></td>
+<td>197</td>
+<td>€345k</td>
+<td>7.0%</td>
+<td>6.6%</td>
+<td>0.8</td>
+<td>22.8%</td>
+<td>21.8%</td>
+<td>26.5</td>
+</tr><tr>
+<td><strong>Sales Rep #3</strong></td>
+<td>138</td>
+<td>€210k</td>
+<td>6.9%</td>
+<td>6.5%</td>
+<td>0.7</td>
+<td>24.6%</td>
+<td>30.4%</td>
+<td>29.6</td>
+</tr><tr>
+<td><strong>Sales Rep #4</strong></td>
+<td>151</td>
+<td>€291k</td>
+<td>6.2%</td>
+<td>7.3%</td>
+<td>0.8</td>
+<td>21.2%</td>
+<td>21.9%</td>
+<td>27.6</td>
+</tr><tr>
+<td><strong>Sales Rep #9</strong></td>
+<td>136</td>
+<td>€266k</td>
+<td>3.7%</td>
+<td>7.4%</td>
+<td>0.7</td>
+<td>22.8%</td>
+<td>25.7%</td>
+<td>26.9</td>
+</tr><tr>
+<td><strong>Sales Rep #10</strong></td>
+<td>146</td>
+<td>€316k</td>
+<td>2.0%</td>
+<td>8.2%</td>
+<td>0.7</td>
+<td>23.3%</td>
+<td>24.7%</td>
+<td>26.6</td>
+</tr></tbody>
     </table>
-  </div>
-</section>
-<section class='section'>
-  <div class='card'>
-    <h2>Business recommendation</h2>
-    <p>Do not incentivize Sales only on closed revenue. Add a revenue-quality component to the commercial KPI framework, linked to early churn, post-sale ticket load, onboarding success and customer health within 90/180 days.</p>
-    <span class='pill'>Closed MRR</span><span class='pill'>Surviving MRR 180d</span><span class='pill'>Ticket load threshold</span><span class='pill'>Customer health</span><span class='pill'>Churn penalty</span>
-  </div>
-</section>
-<section class='section footer'>Synthetic data only. Built for portfolio/demo purposes. MRR means booked MRR at close, not active current MRR.</section>
+  </section>
+
+  <section class="grid3">
+    <div class="card">
+      <h2>Data pipeline</h2>
+      <p>4 raw sources were reconciled into a clean account table: CRM, Product Usage, Support Tickets and Customer Health.</p>
+      <div class="tag">1,565 CRM rows</div><div class="tag">4,713 tickets</div><div class="tag">18,000 health rows</div>
+    </div>
+    <div class="card">
+      <h2>Cleaning decision</h2>
+      <p>`discount_pct` is recalculated from economic values: <strong>1 - contract_value / gross_contract_value</strong>.</p>
+      <p>46 anomalies were documented; 4 impossible values were capped and flagged.</p>
+    </div>
+    <div class="card">
+      <h2>Operating model implication</h2>
+      <p>When Sales closes low-quality revenue, the cost is paid by Support and Customer Success. Over time this can create friction between teams unless incentives are shared.</p>
+    </div>
+  </section>
+
+  <section class="footer">Synthetic data only. Portfolio/demo case. Copyright © 2026 Flavia Occhini. All rights reserved. No license granted.</section>
+</main>
 </body>
 </html>

@@ -2,22 +2,24 @@
 
 All files are synthetic and generated for a public business analytics case. Currency is EUR.
 
+Sales rep names are intentionally anonymized as `Sales Rep #1`, `Sales Rep #2`, etc.
+
 ## Clean account table columns
 
 - `account_id` — Canonical account key after raw-source reconciliation.
 - `account_name` — Synthetic account name.
 - `industry` — Simulated customer industry.
-- `employee_band` — Company size band.
+- `employee_band` — Company size band of the customer, not of PossiblePage Labs.
 - `plan` — Commercial plan sold.
-- `sales_rep` — Synthetic sales representative.
+- `sales_rep` — Anonymized synthetic sales representative label: Sales Rep #1, Sales Rep #2, etc.
 - `acquisition_channel` — Sales / marketing acquisition channel.
 - `close_date` — Deal close date.
 - `contract_start_date` — Contract start date.
 - `gross_contract_value_eur` — Annual gross contract value before discounts.
 - `contract_value_eur` — Clean annual contract value. Impossible rows are capped to gross value and flagged.
 - `discount_pct` — Clean discount percentage, recalculated as 1 - contract_value / gross_contract_value.
-- `discount_anomaly_flag` — TRUE when the raw discount was inconsistent or the source economic values were impossible.
-- `closed_mrr_eur` — Monthly recurring revenue booked at deal close. This is not current active MRR.
+- `discount_anomaly_flag` — TRUE when the raw discount was inconsistent or source economic values were impossible.
+- `closed_mrr_eur` — Monthly recurring revenue booked at deal close. This is not active current MRR.
 - `sales_fit_score` — Synthetic sales/customer-fit score, 0-100.
 - `low_fit_flag` — TRUE when sales_fit_score < 55.
 - `beta_feature_promised` — TRUE if a beta feature was part of the commercial promise.
@@ -45,7 +47,16 @@ All files are synthetic and generated for a public business analytics case. Curr
 
 ## Raw files included
 
-- `data/raw/sales_deals_raw.csv` — raw CRM/deal data with duplicate correction rows and intentionally inconsistent discount fields.
+- `data/raw/sales_deals_raw.csv` — raw CRM/deal data with duplicate correction rows and intentionally inconsistent discount fields. Sales reps are anonymized.
 - `data/raw/onboarding_product_usage_raw.csv` — raw onboarding/product usage; 8% of accounts absent by design.
 - `data/raw/support_tickets_raw.csv` — raw support tickets with intentional missing/out-of-range fields.
 - `data/raw/customer_health_monthly_raw.csv` — account-month health, NPS, CSAT and churn signals.
+
+## Additional analysis files
+
+- `analysis/revenue_quality_segment_summary.csv` — segment-level performance and risk summary.
+- `analysis/sales_rep_quality_summary.csv` — anonymized sales rep quality metrics.
+- `analysis/cohort_quality_comparison.csv` — beta, low-fit, healthy and risky/toxic cohort comparison.
+- `analysis/support_load_proxy_monthly.csv` — monthly support-load and customer-health proxy.
+- `analysis/support_load_spillover_proxy.json` — high/low support-load comparison.
+- `analysis/business_sizing_summary.json` — interpretation of the fictional company profile.

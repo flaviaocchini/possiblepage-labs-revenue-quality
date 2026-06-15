@@ -1,0 +1,11 @@
+{
+  "classification": "Mid-market / scaling B2B SaaS, selling mainly to SMB and mid-market customers",
+  "reasoning": [
+    "1,500 paying accounts in the simulated clean table.",
+    "\u20ac35,871,440 simulated annual contract value / ARR proxy.",
+    "\u20ac23,914 average ACV and \u20ac13,550 median ACV.",
+    "Plan mix is mostly Starter/Growth/Scale, with Enterprise at 6.5%.",
+    "Customer employee bands are mostly 11-50 and 51-200 employees, with 6.0% in 1000+."
+  ],
+  "not_a_good_label": "Not a tiny small business, because the customer base and ARR proxy are too large; not a pure enterprise SaaS, because the plan and employee-band mix are heavily SMB/mid-market."
+}

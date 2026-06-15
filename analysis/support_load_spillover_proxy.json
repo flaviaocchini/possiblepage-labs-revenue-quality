@@ -1,0 +1,11 @@
+{
+  "method_note": "Proxy only: compares high-ticket-volume months vs low-ticket-volume months. This supports a directional business hypothesis, not a causal proof.",
+  "low_load_months_avg_tickets": 34.3,
+  "high_load_months_avg_tickets": 318.0,
+  "low_load_months_avg_nps": 27.6,
+  "high_load_months_avg_nps": 15.3,
+  "low_load_months_avg_csat": 3.68,
+  "high_load_months_avg_csat": 3.38,
+  "ticket_volume_vs_avg_nps_corr": -0.989,
+  "ticket_volume_vs_avg_csat_corr": -0.99
+}
