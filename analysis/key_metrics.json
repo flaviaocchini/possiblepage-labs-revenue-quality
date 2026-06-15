@@ -1,0 +1,57 @@
+{
+  "total_accounts": 1500,
+  "total_closed_mrr": 2989286.66,
+  "surviving_mrr_90d": 2895143.55,
+  "surviving_mrr_180d": 2786513.57,
+  "churned_mrr_180d": 202773.09,
+  "churn_rate_180d": 0.068,
+  "churn_rate_12m": 0.142,
+  "at_risk_mrr_risky_toxic": 213359.96,
+  "risky_toxic_mrr_share": 0.0714,
+  "toxic_mrr_share": 0.0034,
+  "healthy_avg_tickets_90d": 0.68,
+  "toxic_avg_tickets_90d": 1.67,
+  "ticket_multiplier_toxic_vs_healthy": 2.5,
+  "beta_churn_180d": 0.1512,
+  "nonbeta_churn_180d": 0.0401,
+  "lowfit_churn_180d": 0.1705,
+  "highfit_churn_180d": 0.0294,
+  "segment_metrics": [
+    {
+      "segment": "Healthy",
+      "accounts": 1018,
+      "closed_mrr": 2132552.23,
+      "churned_mrr_180": 0,
+      "churned_mrr_180_pct": 0.0,
+      "avg_tickets_90d": 0.6797642436149313,
+      "avg_fit_score": 73.01856581532417
+    },
+    {
+      "segment": "Watchlist",
+      "accounts": 368,
+      "closed_mrr": 643374.47,
+      "churned_mrr_180": 67389.09,
+      "churned_mrr_180_pct": 0.10474318323510723,
+      "avg_tickets_90d": 0.8858695652173914,
+      "avg_fit_score": 53.41494565217391
+    },
+    {
+      "segment": "Risky",
+      "accounts": 108,
+      "closed_mrr": 203231.52,
+      "churned_mrr_180": 125255.56,
+      "churned_mrr_180_pct": 0.6163195551556176,
+      "avg_tickets_90d": 1.1203703703703705,
+      "avg_fit_score": 44.43611111111111
+    },
+    {
+      "segment": "Toxic",
+      "accounts": 6,
+      "closed_mrr": 10128.44,
+      "churned_mrr_180": 10128.44,
+      "churned_mrr_180_pct": 1.0,
+      "avg_tickets_90d": 1.6666666666666667,
+      "avg_fit_score": 31.433333333333334
+    }
+  ]
+}

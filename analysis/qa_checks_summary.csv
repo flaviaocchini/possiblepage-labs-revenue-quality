@@ -1,0 +1,12 @@
+check,result,expected,status
+Raw sales rows,1565,"1,565",PASS
+Clean accounts after dedup,1500,"1,500",PASS
+Product raw coverage,1380,"1,380 rows / 92% coverage",PASS
+Support ticket rows,4713,"4,713",PASS
+Accounts with >=1 support ticket,1316,"1,316",PASS
+Customer health monthly rows,18000,"18,000",PASS
+Clean table columns,38,38,PASS
+discount_pct raw mismatches fixed,46,46 anomalies documented and cleaned,PASS
+contract_value > gross exceptions,4,4 impossible values capped in clean table,PASS
+Missing beta category pass-through,5,5,PASS
+Missing first response pass-through,5,5,PASS

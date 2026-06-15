@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>PossiblePage Labs — Revenue Quality Dashboard</title>
+<style>
+:root { --bg:#f7f4ef; --ink:#1b1b1b; --muted:#666; --card:#ffffff; --line:#e6ded3; --accent:#111827; }
+body { margin:0; font-family: Inter, Arial, sans-serif; background:var(--bg); color:var(--ink); }
+header { padding:54px 8vw 28px; background:#111827; color:white; }
+header p { max-width:900px; color:#d6d6d6; font-size:18px; line-height:1.55; }
+h1 { font-size:48px; margin:0 0 10px; letter-spacing:-1.5px; }
+.section { padding:36px 8vw; }
+.kpis { display:grid; grid-template-columns:repeat(4,minmax(160px,1fr)); gap:18px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow: 0 8px 24px rgba(0,0,0,.04); }
+.kpi-label { color:var(--muted); font-size:13px; text-transform:uppercase; letter-spacing:.08em; }
+.kpi-value { font-size:34px; font-weight:800; margin-top:8px; letter-spacing:-1px; }
+.grid { display:grid; grid-template-columns:1.1fr .9fr; gap:22px; align-items:start; }
+h2 { font-size:28px; margin:0 0 16px; letter-spacing:-.7px; }
+h3 { font-size:19px; margin:0 0 12px; }
+.seg-row { display:grid; grid-template-columns:90px 1fr 250px; gap:12px; align-items:center; margin:14px 0; }
+.seg-label { font-weight:700; }
+.seg-bar-bg { height:18px; background:#eee8df; border-radius:99px; overflow:hidden; }
+.seg-bar { height:18px; border-radius:99px; }
+.seg-num { color:var(--muted); font-size:14px; }
+.table { width:100%; border-collapse:collapse; font-size:14px; }
+.table th, .table td { padding:10px; border-bottom:1px solid var(--line); text-align:left; }
+.table th { color:#555; font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+.callout { border-left:5px solid #111827; background:#fff; padding:22px; border-radius:12px; line-height:1.5; }
+.pill { display:inline-block; padding:6px 10px; border-radius:99px; background:#eee8df; margin:4px; font-size:13px; }
+.footer { color:#777; font-size:13px; padding-bottom:50px; }
+@media(max-width:900px) { .kpis,.grid { grid-template-columns:1fr; } h1 {font-size:36px} .seg-row { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>PossiblePage Labs — Revenue Quality Dashboard</h1>
+  <p>Synthetic AI + strategy case for a B2B no-code SaaS: measuring the difference between revenue closed by Sales and revenue that remains healthy after 90/180 days.</p>
+</header>
+<section class='section'>
+  <div class='kpis'>
+    <div class='card'><div class='kpi-label'>Closed MRR</div><div class='kpi-value'>€2.989.287</div></div>
+    <div class='card'><div class='kpi-label'>Surviving MRR 180d</div><div class='kpi-value'>€2.786.514</div></div>
+    <div class='card'><div class='kpi-label'>MRR churned 180d</div><div class='kpi-value'>€202.773</div></div>
+    <div class='card'><div class='kpi-label'>Risky + Toxic MRR share</div><div class='kpi-value'>7.1%</div></div>
+  </div>
+</section>
+<section class='section grid'>
+  <div class='card'>
+    <h2>Revenue quality segments</h2>
+    <p>Accounts are scored using a composite Revenue Quality Risk Index based on fit, beta promises, product adoption, support load, health and churn signals.</p>
+    
+    <div class='seg-row'>
+      <div class='seg-label'>Healthy</div>
+      <div class='seg-bar-bg'><div class='seg-bar' style='width:100%;background:#1f9d73'></div></div>
+      <div class='seg-num'>1018 acc · 0.0% MRR churned 180d</div>
+    </div>
+    <div class='seg-row'>
+      <div class='seg-label'>Watchlist</div>
+      <div class='seg-bar-bg'><div class='seg-bar' style='width:36%;background:#e4a11b'></div></div>
+      <div class='seg-num'>368 acc · 10.5% MRR churned 180d</div>
+    </div>
+    <div class='seg-row'>
+      <div class='seg-label'>Risky</div>
+      <div class='seg-bar-bg'><div class='seg-bar' style='width:10%;background:#d97706'></div></div>
+      <div class='seg-num'>108 acc · 61.6% MRR churned 180d</div>
+    </div>
+    <div class='seg-row'>
+      <div class='seg-label'>Toxic</div>
+      <div class='seg-bar-bg'><div class='seg-bar' style='width:0%;background:#c2410c'></div></div>
+      <div class='seg-num'>6 acc · 100.0% MRR churned 180d</div>
+    </div>
+  </div>
+  <div class='card'>
+    <h2>Strategic signal</h2>
+    <div class='callout'>
+      Toxic accounts generate <strong>2.5×</strong> the first-90-day ticket load of Healthy accounts.<br><br>
+      Beta-promised accounts churn at <strong>15.1%</strong> within 180 days vs <strong>4.0%</strong> for non-beta-promised accounts.
+    </div>
+  </div>
+</section>
+<section class='section grid'>
+  <div class='card'>
+    <h2>Where commercial quality degrades</h2>
+    <table class='table'>
+      <tr><th>Segment</th><th>Accounts</th><th>Closed MRR</th><th>Churned MRR 180d</th><th>Avg tickets 90d</th><th>Avg fit</th></tr>
+      <tr><td>Healthy</td><td>1018</td><td>€2.132.552</td><td>0.0%</td><td>0.7</td><td>73.0</td></tr><tr><td>Watchlist</td><td>368</td><td>€643.374</td><td>10.5%</td><td>0.9</td><td>53.4</td></tr><tr><td>Risky</td><td>108</td><td>€203.232</td><td>61.6%</td><td>1.1</td><td>44.4</td></tr><tr><td>Toxic</td><td>6</td><td>€10.128</td><td>100.0%</td><td>1.7</td><td>31.4</td></tr>
+    </table>
+  </div>
+  <div class='card'>
+    <h2>Sales lens</h2>
+    <table class='table'>
+      <tr><th>Sales rep</th><th>Accounts</th><th>Avg risk</th><th>180d churn</th><th>Avg tickets 90d</th></tr>
+      <tr><td>Giulia Neri</td><td>138</td><td>29.6</td><td>6.5%</td><td>0.7</td></tr><tr><td>Nina Poli</td><td>121</td><td>28.5</td><td>9.1%</td><td>0.8</td></tr><tr><td>Marta Fabbri</td><td>145</td><td>28.4</td><td>7.6%</td><td>0.8</td></tr><tr><td>Elena Costa</td><td>156</td><td>28.2</td><td>7.1%</td><td>0.7</td></tr><tr><td>Luca Serra</td><td>151</td><td>27.6</td><td>8.6%</td><td>0.8</td></tr>
+    </table>
+  </div>
+</section>
+<section class='section'>
+  <div class='card'>
+    <h2>Business recommendation</h2>
+    <p>Do not incentivize Sales only on closed revenue. Add a revenue-quality component to the commercial KPI framework, linked to early churn, post-sale ticket load, onboarding success and customer health within 90/180 days.</p>
+    <span class='pill'>Closed MRR</span><span class='pill'>Surviving MRR 180d</span><span class='pill'>Ticket load threshold</span><span class='pill'>Customer health</span><span class='pill'>Churn penalty</span>
+  </div>
+</section>
+<section class='section footer'>Synthetic data only. Built for portfolio/demo purposes. MRR means booked MRR at close, not active current MRR.</section>
+</body>
+</html>
